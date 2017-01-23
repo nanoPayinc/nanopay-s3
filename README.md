@@ -18,7 +18,7 @@ const bucket = NAME_OF_THE_S3_BUCKET;
 
 const req = HTTP_REQUEST_CONTAINING_STREAMED_DATA;
 
-s3.upload(localPath, bucket, req, function (error, response) {
+s3.upload(localPath, bucket, req, (error, response) => {
   if (error) {
     cb(error);
   }
@@ -38,7 +38,7 @@ const bucket = NAME_OF_THE_S3_BUCKET;
 
 const req = HTTP_REQUEST_CONTAINING_STREAMED_DATA;
 
-s3.uploadS3(filePath, fileName, bucket, function (error, response) {
+s3.uploadS3(filePath, fileName, bucket, (error, response) => {
   if (error) {
     cb(error);
   }

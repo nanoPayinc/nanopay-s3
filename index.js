@@ -2,7 +2,6 @@
 const AWS = require('aws-sdk');
 const fs = require('fs');
 const formidable = require('formidable');
-let s3;
 
 /**
  * @param {string} accessKey - AWS Access Key
@@ -12,8 +11,8 @@ let s3;
  * @constructor
  */
 function Client(accessKey, secretKey, environment) {
-    if (!token) {
-        throw new Error('Slack Token is required');
+    if (!accessKey || !secretKey || !environment) {
+        throw new Error('You forgot a required parameter');
     }
     AWS.config.update({ accessKeyId: accessKey, secretAccessKey: secretKey });
     
@@ -41,7 +40,7 @@ Client.prototype.upload = (localPath , bucket, req, cb) => {
 
   // every time a file has been uploaded successfully,
   // rename it to an unique name
-  form.on('file', function(field, newFile) {
+  form.on('file', (field, newFile) => {
     file = newFile;
     
     // TODO: Create unique Name regardless timestamp
@@ -53,20 +52,20 @@ Client.prototype.upload = (localPath , bucket, req, cb) => {
     fs.renameSync(file.path, newPath);
   });
 
-  form.on('error', function(err) {
+  form.on('error', err => {
     cb(err);
   });
 
   // once all the files have been uploaded, send a response to the client
-  form.on('end', function() {
+  form.on('end', () => {
     
     this.uploadS3(newPath, file.name, bucket, 
-    function(error, response) {
+    (error, awsResponse) => {
       if (error) {
         cb(error);
       }
-      const awsResponse = response;
-      fs.unlink(newPath, function(error, response) {
+      
+      fs.unlink(newPath, (error, response) => {
         if (error) {
           cb(error);
         }
@@ -100,7 +99,7 @@ Client.prototype.uploadS3 = (filePath, fileName, bucket, cb) => {
       Key: this.environment+'/'+fileName,
       Body: fileBuffer,
       ContentType: metaData
-    }, function(error, response) {
+    }, (error, response) => {
       if (error) {
         return cb(error);
       }
