@@ -69,7 +69,4 @@ Client.prototype.upload = function (bucket, bucketPath, acl, req, cb) {
 
 }; 
 
-// promisify all functions defined on clients with suffix "Sync"
-Client = Promise.promisifyAll(Client, { suffix: 'Sync' });
-
 module.exports = Client;
