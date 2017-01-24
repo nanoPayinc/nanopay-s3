@@ -4,7 +4,7 @@ This library is responsible for all the services related to AWS S3.
 
 ## Methods
 
-### Bots
+### Upload
 
 - `upload(bucket, req, cb)` (return: function) - Uploads to S3
 
