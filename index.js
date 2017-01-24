@@ -2,6 +2,7 @@
 
 const AWS = require('aws-sdk');
 const formidable = require('formidable');
+const Promise = require('bluebird');
 
 /**
  * @param {string} accessKey - AWS Access Key
@@ -64,5 +65,8 @@ Client.prototype.upload = function (bucket, bucketPath, acl, req, cb) {
   form.parse(req);
 
 }; 
+
+// promisify all functions defined on clients with suffix "Sync"
+Client = Promise.promisifyAll(Client, { suffix: 'Sync' });
 
 module.exports = Client;
