@@ -1,9 +1,9 @@
 'use strict'
 
-const AWS = require('aws-sdk');
-const fs = require('fs');
-const path = require('path');
-const formidable = require('formidable');
+var AWS = require('aws-sdk');
+var fs = require('fs');
+var path = require('path');
+var formidable = require('formidable');
 
 /**
  * @param {string} accessKey - AWS Access Key
@@ -20,6 +20,7 @@ function Client(accessKey, secretKey, environment) {
     
     this.s3 = new AWS.S3();
     this.environment = environment;
+    
 }
 
 /**
@@ -32,10 +33,11 @@ function Client(accessKey, secretKey, environment) {
  * @returns {function}
  * @private
  */
-Client.prototype.upload = (localPath , bucket, req, cb) => {
+Client.prototype.upload = function (localPath , bucket, req, cb) {
 
-  const form = new formidable.IncomingForm();
-
+  var form = new formidable.IncomingForm();
+  
+  
   form.uploadDir = localPath;
   
   let newPath, file;
@@ -47,7 +49,7 @@ Client.prototype.upload = (localPath , bucket, req, cb) => {
     
     // TODO: Create unique Name regardless timestamp
     //(if we have 2 user uploading files at the exact timestamp we'll have problems)
-    const uniqueName = (new Date()).getTime() + file.name;
+    var uniqueName = (new Date()).getTime() + file.name;
     
     newPath = path.join(form.uploadDir, uniqueName);
 
@@ -58,7 +60,6 @@ Client.prototype.upload = (localPath , bucket, req, cb) => {
     cb(err);
   });
 
-  // once all the files have been uploaded, send a response to the client
   form.on('end', () => {
     
     this.uploadS3(newPath, file.name, bucket, 
@@ -71,9 +72,9 @@ Client.prototype.upload = (localPath , bucket, req, cb) => {
         if (error) {
           cb(error);
         }
-
+        
         cb(false, awsResponse);
-      })
+      });
 
     });    
   });
@@ -91,10 +92,10 @@ Client.prototype.upload = (localPath , bucket, req, cb) => {
  * @returns {function}
  * @private
  */
-Client.prototype.uploadS3 = (filePath, fileName, bucket, cb) => {
-
-    const fileBuffer = fs.readFileSync(filePath);
-    const metaData = getContentTypeByFile(fileName);
+Client.prototype.uploadS3 = function (filePath, fileName, bucket, cb) {
+    
+    var fileBuffer = fs.readFileSync(filePath);
+    var metaData = getContentTypeByFile(fileName);
     
     this.s3.putObject({
       Bucket: bucket,
@@ -111,9 +112,9 @@ Client.prototype.uploadS3 = (filePath, fileName, bucket, cb) => {
 
 };
 
-const getContentTypeByFile = fileName => {
+function getContentTypeByFile (fileName) {
   let rc = 'application/octet-stream';
-  const fn = fileName.toLowerCase();
+  var fn = fileName.toLowerCase();
 
   if (fn.indexOf('.html') >= 0) rc = 'text/html';
   else if (fn.indexOf('.css') >= 0) rc = 'text/css';
@@ -124,5 +125,7 @@ const getContentTypeByFile = fileName => {
 
   return rc;
 }
+
+
 
 module.exports = Client;
