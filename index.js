@@ -44,7 +44,8 @@ Client.prototype.upload = function (localPath , bucket, req, cb) {
 
   // every time a file has been uploaded successfully,
   // rename it to an unique name
-  form.on('file', (field, newFile) => {
+  form.on('file', 
+  function (field, newFile) {
     file = newFile;
     
     // TODO: Create unique Name regardless timestamp
@@ -56,19 +57,20 @@ Client.prototype.upload = function (localPath , bucket, req, cb) {
     fs.renameSync(file.path, newPath);
   });
 
-  form.on('error', err => {
+  form.on('error', function (err)  {
     cb(err);
   });
 
-  form.on('end', () => {
+  form.on('end', function () {
     
     this.uploadS3(newPath, file.name, bucket, 
-    (error, awsResponse) => {
+    function (error, awsResponse) {
       if (error) {
         cb(error);
       }
       
-      fs.unlink(newPath, (error, response) => {
+      fs.unlink(newPath, 
+      function (error, response) {
         if (error) {
           cb(error);
         }
@@ -102,7 +104,7 @@ Client.prototype.uploadS3 = function (filePath, fileName, bucket, cb) {
       Key: this.environment+'/'+fileName,
       Body: fileBuffer,
       ContentType: metaData
-    }, (error, response) => {
+    }, function (error, response) {
       if (error) {
         return cb(error);
       }
