@@ -23,11 +23,12 @@ function Client(accessKey, secretKey) {
  *
  * @param {string} bucket - the S3 bucket 
  * @param {string} bucketPath - the S3 Bucket Path
+ * @param {string} acl - the ACL the defines the permissions for the file, see more: http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html
  * @param {object} req - the HTTP request containg the file(Stream)
  * @returns {function}
  * @private
  */
-Client.prototype.upload = function (bucket, bucketPath, req, cb) {
+Client.prototype.upload = function (bucket, bucketPath, acl, req, cb) {
 
   const self = this;
   
@@ -46,7 +47,8 @@ Client.prototype.upload = function (bucket, bucketPath, req, cb) {
       self.s3.upload({
         "Bucket": bucket,
         "Key": bucketPath+'/'+uniqueName,
-        "Body": data
+        "Body": data,
+        "ACL": acl
       }, function (error, response) {
         if (error) {
           return cb(error);
