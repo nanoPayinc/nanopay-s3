@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nanoPayinc/nanopay-s3.git#es5-version"
+    "url": "git+https://github.com/nanoPayinc/nanopay-s3.git"
   },
   "keywords": [
     "nanopay",
