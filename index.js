@@ -16,6 +16,9 @@ function Client(accessKey, secretKey) {
     AWS.config.update({ accessKeyId: accessKey, secretAccessKey: secretKey });
     
     this.s3 = new AWS.S3();
+
+    // Promisifying all prototypes methods with suffix "Sync"...
+    Promise.promisifyAll(Object.getPrototypeOf(this), { suffix: 'Sync' });
 }
 
 /**
