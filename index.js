@@ -9,7 +9,7 @@ const formidable = require('formidable');
  * @constructor
  */
 function Client(accessKey, secretKey) {
-    if (!accessKey || !secretKey || !environment) {
+    if (!accessKey || !secretKey) {
         throw new Error('You forgot a required parameter');
     }
     AWS.config.update({ accessKeyId: accessKey, secretAccessKey: secretKey });
