@@ -4,7 +4,7 @@ This library handles services related to AWS S3.
 
 It uses the following dependencies:
 
-- [Bluebird](https://github.com/petkaantonov/bluebird) ). 
+- [Bluebird](https://github.com/petkaantonov/bluebird)  
 - [Formidable](https://github.com/felixge/node-formidable)
 - [AWS SDK](https://github.com/aws/aws-sdk-js)
 
@@ -13,8 +13,8 @@ It uses the following dependencies:
 
 ### Upload
 
-- `upload(bucket, bucketPath, acl, req, cb)` (return: function) - Uploads to S3 using callback pattern
-- `uploadSync(bucket, bucketPath, acl, req)` (return: Promise) - Uploads to S3 using Promises pattern.
+- `upload(bucket, bucketPath, acl, req, cb)` (return: function) - Uploads File to S3 Using Http Multipart requests(Streams) using callback pattern
+- `uploadSync(bucket, bucketPath, acl, req)` (return: Promise) - Uploads File to S3 Using Http Multipart requests(Streams) using Promises pattern.
 
 
 ## Usage
